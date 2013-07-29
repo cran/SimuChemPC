@@ -1,0 +1,14 @@
+411023637973326c941fc0561f79c945 *DESCRIPTION
+9831ce96593aa6a1318d9cd5df01fde6 *NAMESPACE
+c118c89524f3e6eb01f10c4ba066b7a6 *R/SimuChemPC.r
+2503b886bfec990f76b511fb74c7e5f1 *inst/CITATION
+8b042272b17fb20b4988392ddfacf377 *inst/doc/SimuChemPC.pdf
+a307270cd3e0c6c4d5f02a3ce22f8c2c *inst/extdata/11407_Descriptors_Potency.txt
+bd426d771f8348f4023f3304c3178723 *inst/extdata/11624_Descriptors_Potency.txt
+441c16f129a7b71898cd9a355d0f9487 *inst/extdata/11910_Descriptors_Potency.txt
+0e49e035ebeaad34aaddf35d33f8d385 *inst/extdata/12261_Descriptors_Potency.txt
+8f89ef3c702cd0ef9f62a7932e1b5fe5 *inst/extdata/235_Descriptors_Potency.txt
+beb5a2011808de4679c71b57bb71e0d5 *inst/extdata/242_Descriptors_Potency.txt
+993cdf412695f6bd82c85115944573ad *inst/extdata/3_Descriptors_Potency.txt
+e40f31790ab6bcc418954529a0f51f40 *inst/extdata/seeds_for_random_generatorMatlab.txt
+e14d18a0dddcfe2923865a4efaf3fa9a *man/SimuChemPC.Rd

@@ -1,0 +1,13 @@
+citHeader("To cite SimuChem in publications use this reference:")
+
+citEntry(entry = "Article",
+  author = "M Ahmadi, M Vogt, P Iyer, J Bajorath, H Froehlich",
+  title = "Predicting Potent Compounds via Model-Based Global Optimization",
+  journal = "Journal of Chemical Information and Modeling",
+  year = "2013",
+  volume = "53",
+  pages = "553-559",
+  textVersion = "Predicting Potent Compounds via Model-Based Global Optimization, Journal of Chemical Information and Modeling, 2013, 53 (3), pp 553-559, M Ahmadi, M Vogt, P Iyer, J Bajorath, H Froehlich."
+)
+
+
