@@ -1,2 +1,2 @@
 import(gpr)
-export(SimuChemPC)
+export(SimuChemPC,predictChemPC,trainChemPC)

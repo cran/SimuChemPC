@@ -41,19 +41,19 @@ OneNN_Tc = function(X1,X2){
     return( index )
 }
 
-SimuChemPC = function( dataFile, dataset, seedFile, simulationType, repeatExperiment = 25)
+SimuChemPC = function( dataFile, seedFile, method, repeatExperiment = 25)
 {
-	 if (is.null(dataFile) ||  is.null(dataset) || is.null(seedFile) || is.null(simulationType) ){
+	 if (is.null(dataFile) || is.null(seedFile) || is.null(method) ){
 	 	  print("Error : Input parameteres can not be null.")
 	 	  return
 	 }
 	simulation=0
-	if (simulationType== "random") simulation=1
-	if (simulationType== "EI") simulation=2
-	if (simulationType== "1NN") simulation=3
-	if (simulationType== "GP") simulation=4
+	if (method== "random") simulation=1
+	if (method== "EI") simulation=2
+	if (method== "1NN") simulation=3
+	if (method== "GP") simulation=4
 	if(simulation ==0 ){
-		 	  print("Error : function is called with wrong simulation Type parameter.")
+		 	  print("Error : function is called with wrong method parameter.")
 	 	  return
 	}	
 	a<-read.table(seedFile)   # read data from file with tab delimiter
@@ -125,7 +125,7 @@ SimuChemPC = function( dataFile, dataset, seedFile, simulationType, repeatExperi
         		N___=N___[-ran]
         		END=END-1
     	}
-   # ===================== CHECK =======================================
+   #===================== CHECK =======================================
     D_3_train=c(D_3_train,list(trainX,trainY))#index is(loop*2)-1   like:  trainX=D_3_train[[(loop*2)-1]]
     D_3_test=c(D_3_test,list(testX,testY))
    #============= Normalization =====================================
@@ -212,7 +212,7 @@ SimuChemPC = function( dataFile, dataset, seedFile, simulationType, repeatExperi
 	        PotencyReal =array(PotencyReal, c(c.init,TOTAL))
 	}
     #================= Run simulation =================================
-    print(paste("Running the simulation: ", simulationType,".",sep=""))
+    print(paste("Running the method: ", method,".",sep=""))
      counter = 1 
     while (TRUE){    			
 		        d1=dim(xstar)[1]
@@ -280,20 +280,7 @@ SimuChemPC = function( dataFile, dataset, seedFile, simulationType, repeatExperi
 			   testID=   testID[-index]			      		
 		}#end while	    
 	 }#end for loop
-	 if (simulation==1){
-	 	print(paste("storing the simulation result in file: " ,dataset, "_Feature Selection_Random.RData", sep=""))
-	 	dump(ls(),paste(dataset, "_Feature Selection_Random.RData", sep=""))	 	
-	 }
-	if (simulation==2){
-		print(paste("storing the simulation result in file: " ,dataset, "_Feature Selection_EI.RData", sep=""))
-    		dump(ls(),paste(dataset,"_Feature Selection_EI.RData" , sep=""))
-	 }
-	if (simulation==3){
-		print(paste("storing the simulation result in file: " ,dataset, "_Feature Selection_1NN.RData", sep=""))
-    		dump(ls(),paste(dataset,"_Feature Selection_1NN.RData", sep=""))
-	}
-	if (simulation==4){
-		print(paste("storing the simulation result in file: " ,dataset, "_Feature Selection_GP.RData", sep=""))
-    		dump(ls(),paste(dataset,"_Feature Selection_GP.RData", sep=""))
-	}
+	 print(paste("storing the method result in file: " ,method, "_Feature Selection_Random.RData", sep=""))
+	 dump(ls(),paste(method, "_Feature Selection_Random.RData", sep=""))	 	
+	
 }

@@ -1,8 +1,12 @@
-411023637973326c941fc0561f79c945 *DESCRIPTION
-9831ce96593aa6a1318d9cd5df01fde6 *NAMESPACE
-c118c89524f3e6eb01f10c4ba066b7a6 *R/SimuChemPC.r
+53771ea16eb847ccaa6dd8bde3bdb4dc *DESCRIPTION
+df9c7aff01d79af477ef19664c505448 *NAMESPACE
+25ff00815a4e4a5a70f32fe213ada618 *R/SimuChemPC.r
+7d39aa9b8c0dd455c018b3b1950f5a75 *R/predictChemPC.r
+18ec5d63ef59100a6e440b323c6f4604 *R/trainChemPC.r
 2503b886bfec990f76b511fb74c7e5f1 *inst/CITATION
-8b042272b17fb20b4988392ddfacf377 *inst/doc/SimuChemPC.pdf
+d0bf9f94147e17cfd7b4a780641dd07e *inst/doc/SimuChemPC.pdf
+11b5bc1d077c511a65b7a9adc8b53059 *inst/doc/predictChemPC.pdf
+d4230f4ff19554d3f60abaa330f4bccf *inst/doc/trainChemPC.pdf
 a307270cd3e0c6c4d5f02a3ce22f8c2c *inst/extdata/11407_Descriptors_Potency.txt
 bd426d771f8348f4023f3304c3178723 *inst/extdata/11624_Descriptors_Potency.txt
 441c16f129a7b71898cd9a355d0f9487 *inst/extdata/11910_Descriptors_Potency.txt
@@ -11,4 +15,6 @@ bd426d771f8348f4023f3304c3178723 *inst/extdata/11624_Descriptors_Potency.txt
 beb5a2011808de4679c71b57bb71e0d5 *inst/extdata/242_Descriptors_Potency.txt
 993cdf412695f6bd82c85115944573ad *inst/extdata/3_Descriptors_Potency.txt
 e40f31790ab6bcc418954529a0f51f40 *inst/extdata/seeds_for_random_generatorMatlab.txt
-e14d18a0dddcfe2923865a4efaf3fa9a *man/SimuChemPC.Rd
+9fd82414c720117885a9a35666d15a7a *man/SimuChemPC.Rd
+4fe81db68e61233583c2bbf25831c424 *man/predictChemPC.Rd
+3aff0e5d0e4af04285d895784cf5291c *man/trainChemPC.Rd
