@@ -2,30 +2,29 @@
 \alias{SimuChemPC}
 \alias{SimuChemPC, character list, character list, character list, character list,integer}
 \title{SimuChemPC}
-\description{ This function excutes a simulation to compare 4 methods for predicting potent compounds. These methods are Random selection, EI selection, 1NN selection and GP selection.}
+\description{ This function executes a simulation to compare 4 methods for predicting potent compounds. These methods are EI, GP, NN and RA.}
 \usage{
-SimuChemPC( dataFile, seedFile, method, repeatExperiment = 25)
+SimuChemPC(dataX, dataY, method="RA", experiment=1)
 }
 
 \arguments{
-  \item{dataFile}{\code{dataFile} specifies address of dataset file to use.}
-  \item{seedFile}{\code{seedFile} is an input random seed file which should be generated before. Simulation process uses it to randomise test and learning data selection.} 
-  \item{method}{\code{method} a string value to specify prediction and learning method. Its value can be one of random, 1NN, EI or GP. }
-  \item{repeatExperiment}{\code{repeatExperiment} a integer value that declares number that the experiment repeats. In our published experiment it was 25. }
+  \item{dataX}{ m * n martrix of data (features/descriptors).}
+  \item{dataY}{ m * 1 matrix of target values (potencies).} 
+  \item{method}{ One of "EI", "GP", "NN" or "RA". }
+  \item{experiment}{ An integer value that indicates a number by which experiment repeats. In our published experiment it was set to 25. }
 }
 
 \details{
 This function withholds 4 simulation methods to predict potent compounds .
-There exist a set of sample seed and dataset files in the package which belong the relevant paper mentioned in the reference.  
-\code{method} can be random, 1NN , EI or GP. The explanation of the abbreviations is listed below.
+\code{method} can be RA, NN , EI or GP. The explanation of the abbreviations is listed below.
 
-	\code{random selection:} One compound will be selected randomly and added to train data each time.
+	\code{RA selection:} One compound will be selected randomly and added to train data each time.
 	
-	\code{1NN selection:} The compound for which is nearest (based on Tonimito Coefficient) to the most potent compound in training data is selected and added to train data.
+	\code{NN selection:} The compound which is nearest (based on Tonimito Coefficient) to the most potent compound in training data is selected and added to train data.
 	
-	\code{EI selection} a compound for which maximum expected improvement is reached, is selected and then it is added to train data.
+	\code{EI selection} A compound for which maximum expected potency improvement is reached, is selected and then it is added to train data.
 	
-	\code{GP selection} a compound holding maximum potency in test data is selected.
+	\code{GP selection} A compound holding maximum potency in test data is selected.
 
 \code{Feature selection}
 Feature selection employed in this package is based on Spearman Rank Correlation such that
@@ -33,20 +32,17 @@ before each training step those attributes in which revealed a significant Spear
 with the logarithmic potency values (q-value < 5%) of the training data are selected. Q-values
 are computed from original p-values via the multiple testing correction method by Benjamini and Hochberg.
 
-\code{Format of Input files}
-Each Input file is a 2-dim matrix  of real values in which the last column contains target values and the rest are attributes.
-
 \code{The purpose of simulation step}
 Simulation step is employed to select the compound(in the case where input files are chemical compounds)
 in which maximal expected potency improvement is met. Subsequently, this compound is added to train data 
-and simulation continues untill all test data are consumed. Finally, the number of simulation steps is determined which
-the algorithm used to select the most potent compound in the test set.
+and simulation continues until all test data are consumed. Finally, the number of simulation steps is determined which
+the algorithm used to select the most potent compound in the "original" test set.
 
-\code{In this code, given our data sets (chemical coumpounds), we do the followings:}
+\code{In this code, given our data sets (chemical compounds), we do the followings:}
 
 	1. We split our data into two distinguish parts namely Train and Test data
 
-	2. We do normalizatoin on both parts
+	2. We do normalization on both parts
 
 	3. We employ a specific feature selection algorithm (i.e. Multiple Testing Correction) to overcome high dimensionality
 
@@ -56,7 +52,7 @@ the algorithm used to select the most potent compound in the test set.
 
 }
 
-\value{It stores a sequence of predicted values of a selected method into a datafile. The file name will consist method and input data file name.
+\value{returns a matrix (m * experiment) of original potencies in test set.
 }
 
 \references{
@@ -68,14 +64,8 @@ the algorithm used to select the most potent compound in the test set.
 \author{Mohsen Ahmadi}
 
 \examples{
-library(gpr)
-library(SimuChemPC)
-seedpath = "seeds_for_random_generatorMatlab.txt"
-seedFile = system.file("extdata", seedpath , package="SimuChemPC")
-datapath = "11407_Descriptors_Potency.txt"
-dataFile  = system.file("extdata", datapath , package="SimuChemPC")
-method  = "random"
-repeatExperiment = 1
-SimuChemPC( dataFile, seedFile, method , repeatExperiment)
+x = as.data.frame(array(1:100, dim=c(20,5)))
+y = as.matrix(as.numeric(array(1:20, dim=c(20,1))))
+SimuChemPC(x, y, "RA", 5)
 }
-\keyword{chemical, potent compounds, constraint global optimization, expected potency improvement, gpr, gaussian process}
+\keyword{chemical, potent compounds, constraint global optimization, expected potency improvement, gaussian process}

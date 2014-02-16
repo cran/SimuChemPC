@@ -2,22 +2,22 @@
 \alias{trainChemPC}
 \alias{trainChemPC, character list, character list}
 \title{trainChemPC}
-\description{This function performs learning step of GP and EI.}
+\description{Apply Gaussian Process Regression to learn the model.}
 \usage{
-trainChemPC( trainData, targetVector)
+trainChemPC(xTrain, yTrain)
 }
 
 \arguments{
-  \item{trainData}{\code{trainData} specifies a data frame including an array of a training data with dimension of n*m. This data is used in to find a hyperlog vector.}
-  \item{targetVector}{\code{targetVector} is a one dimensional array with n rows which is equal to number of rows in trainData.}
+  \item{xTrain}{ m * n martrix of train data.}
+  \item{yTrain}{ m * 1 matrix of target values.}
 }
 
 \details{
-This function performs training step of GP or EI by finding a loghyper using gpr package. A loghyper can be used to predict potent compounds.
+This function performs training step of GP or EI by finding loghyper parameters.
 }
 
 \value{
-It returns a vector that holds a calculated loghyper.
+It returns a vector that holds calculated loghyper parameters.
 }
 
 \references{
@@ -28,10 +28,8 @@ It returns a vector that holds a calculated loghyper.
 
 \author{Mohsen Ahmadi}
 \examples{
-library(gpr)
-library(SimuChemPC)
-a = as.data.frame(array(1:10, dim=c(2,5)))
-b = array(1:2)
-myloghyper = trainChemPC( a, b)
+x = as.data.frame(array(1:100, dim=c(20,5)))
+y = as.matrix(as.numeric(array(1:20, dim=c(20,1))))
+loghyper = trainChemPC(x, y)
 }
-\keyword{train, chemical, potent compounds, constraint global optimization, expected potency improvement, gpr, gaussian process}
+\keyword{train, chemical, potent compounds, constraint global optimization, expected potency improvement, gaussian process}

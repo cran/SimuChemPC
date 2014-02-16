@@ -1,2 +1,2 @@
-import(gpr)
-export(SimuChemPC,predictChemPC,trainChemPC)
+import(stats, graphics, grDevices, utils)
+export(SimuChemPC, predictChemPC, trainChemPC)
