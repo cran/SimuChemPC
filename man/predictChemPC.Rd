@@ -9,7 +9,7 @@ predictChemPC(xTrain, yTrain, xTest, loghyper, method="RA")
 
 \arguments{
   \item{xTrain}{ m * n martrix of train data.}
-  \item{yTrain}{ m * 1 matrix of target values.}
+  \item{yTrain}{ m * 1 matrix of target values consist of potencies, pIC50 or other measurements of compound affinities that are desired to be maximized.}
   \item{xTest}{ j * n matrix of test data.}
   \item{loghyper}{ 3 * 1 matrix of loghyper parameters which is the output of trainChemPC function. } 
   \item{method}{ One of "EI", "GP", "NN" or "RA". }

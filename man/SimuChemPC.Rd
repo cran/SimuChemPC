@@ -9,7 +9,7 @@ SimuChemPC(dataX, dataY, method="RA", experiment=1)
 
 \arguments{
   \item{dataX}{ m * n martrix of data (features/descriptors).}
-  \item{dataY}{ m * 1 matrix of target values (potencies).} 
+  \item{dataY}{ m * 1 matrix of target values consist of potencies, pIC50 or other measurements of compound affinities that are desired to be maximized.} 
   \item{method}{ One of "EI", "GP", "NN" or "RA". }
   \item{experiment}{ An integer value that indicates a number by which experiment repeats. In our published experiment it was set to 25. }
 }

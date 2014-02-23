@@ -1,2 +1,2 @@
-import(stats, graphics, grDevices, utils)
+import(stats, graphics, grDevices, utils, rcdk)
 export(SimuChemPC, predictChemPC, trainChemPC)

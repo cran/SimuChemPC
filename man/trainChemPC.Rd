@@ -9,7 +9,7 @@ trainChemPC(xTrain, yTrain)
 
 \arguments{
   \item{xTrain}{ m * n martrix of train data.}
-  \item{yTrain}{ m * 1 matrix of target values.}
+  \item{yTrain}{ m * 1 matrix of target values consist of potencies, pIC50 or other measurements of compound affinities that are desired to be maximized.}
 }
 
 \details{

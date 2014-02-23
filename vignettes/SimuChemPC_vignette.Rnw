@@ -1,0 +1,209 @@
+\documentclass[a4paper]{article}
+
+\title{Package Vignette\\[1ex]\small{SimuChemPC}}
+\author{Mohsen Ahmadi\\\small{mohsen\underline{ }ahmadi989@yahoo.com}}
+\date{Jan 2014}
+
+\usepackage{Sweave}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\hypersetup{
+    linktoc=page,
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor  = blue
+}
+%\VignetteIndexEntry{SimuChemPC}
+\begin{document}
+\maketitle
+
+\tableofcontents 
+\newpage
+\section{Motivation} 
+\paragraph{}QSAR (Quantitative Structure-Activity Relationship) modeling is used to predict the activity of compounds relying on the activity of known compounds and whose ultimate aim is to identify highly potent compounds. In this package, we propose an efficient method (i.e. \textbf{EI}) by which finding potent compounds is faster than underlying competitors (i.e. \textbf{GP}, \textbf{NN} and \textbf{RA})\\\\Molecular Descriptors are calculated for each compound where they are related to the measured biological activity from a mathematical aspect. \\\\In this tutorial, we are going to walk through a workflow example in which you can see how the package works and can be used.
+
+\section{Data Initialization} 
+\paragraph{}First of all, these libraries should be included into your R (>=2.13).
+
+
+<<>>=
+library(rcdk)
+library(SimuChemPC)
+@
+
+
+\paragraph{}Starting from a sample SDF file, We use \href{http://cran.r-project.org/web/packages/rcdk/index.html}{\textbf{rcdk}} package to get features/descriptors as the input for \href{http://cran.r-project.org/web/packages/SimuChemPC/index.html}{\textbf{SimuChemPC}} package. We load our sample SDF file like so (of course, the path of your file should be set accordingly):
+
+
+<<>>=
+SDF_file = system.file("extdata", "sample.sdf" , package="SimuChemPC")
+mols <- load.molecules(SDF_file)
+length(mols)
+mols=mols[1:20]
+@
+
+\paragraph{}We take 20 out of 100 molecules to save running time. We have different descriptors to be used as input data. In our tutorial we use a type of \textbf{WeightedPathDescriptor}.
+
+
+<<>>=
+descNames <- c('org.openscience.cdk.qsar.descriptors.molecular.WeightedPathDescriptor')
+descNames
+features <- eval.desc(mols, descNames)
+@
+
+
+\paragraph{}Having calculated descriptors in hand, we are going to fetch potencies from our sample SDF file.\\\\In such a SDF file, there are some properties for each molecule inside. We can see the list of properties for first molecule as follows:
+
+<<>>=
+get.properties(mols[[1]])
+@
+
+\paragraph{}With the help of "\emph{\textbf{get.property}}" function we can fetch specific attributes from each molecule in our sample SDF file. In order to fetch "molecule index" and "potency" for each of which we do like so:\\
+
+<<>>=
+get.property(mols[[1]], "Potency[nM]")
+get.property(mols[[1]], "cr_index")
+@
+
+\paragraph{}To do so for all molecules in SDF file, we make a data frame object called "potency" and we bind it as follows:
+
+<<>>=
+p = data.frame()
+
+for (i in 1:length(mols)) 
+{
+ Potency = get.property(mols[[i]], "Potency[nM]");
+ p = rbind(p, data.frame(Potency))
+}
+@
+
+
+
+\paragraph{}After taking those values out, it's the time to combine each of descriptors with corresponding potency values. Here we go:
+
+<<>>=
+datafile <- cbind(features, p)
+
+dim(datafile)
+datafile[1:5,]
+@
+
+\paragraph{}At this point, we are done within data initialization. We use this data frame object further as input in package workflow.
+
+\section{Utility Functions}
+\paragraph{}We have two functions namely "trainChemPC" and "predictChemPC". \\The first function is used to get \textbf{train data} and \textbf{target values} as input and returns "loghyper" parameters. \\\\The latter function takes "train data", "test data" (for prediction), "target values", "method" (one of four different methods) and "loghyper" parameters already obtained from first function. In order to apply these functions on our sample data, first we split data into two parts for train and test data. So, we try:
+
+
+<<>>=
+len <- dim(datafile)[1]
+len
+
+half <- dim(datafile)[1] / 2
+half
+
+col <- dim(datafile)[2]
+col
+
+xTrain <- datafile[1:half, 1:(col-1)]
+yTrain <- as.matrix(as.numeric(array(datafile[1:half, col])))
+
+xTest <- datafile[(half+1):len, (1:col-1)]
+yTest <- as.matrix(as.numeric(array(datafile[(half+1):len, col])))
+@
+
+
+\paragraph{}We pass "xTrain" and "yTrain" to trainChemPC function as input and we get loghyper parameters as output of this function. The result of our sample is shown here:
+
+<<>>=
+loghyper = trainChemPC(xTrain, yTrain)
+
+loghyper
+@
+
+\paragraph{}In the light of predictChemPC function, we make a prediction based on four different methods namely: \textbf{EI}, \textbf{GP}, \textbf{NN}, \textbf{RA}.
+
+\begin{itemize}
+  \item EI (\emph{Expected Improvement}): A compound for which maximum expected potency improvement is reached.\\
+  \item GP (\emph{Gaussian Process Regression}): A compound holding maximum predicted potency in test data is selected.\\
+  \item NN (\emph{Nearest Neighbor}): A compound that is nearest (Tonimito Coefficient as distance measure) to the most
+	potent compound in training data is selected.\\
+  \item RA (\emph{Random}): As it's name suggests, a compound is selected randomly.
+\end{itemize}
+
+\paragraph{}Here are the results of predictChemPC for our sample data in each method:
+
+
+<<>>=
+predictChemPC(xTrain, yTrain, xTest, loghyper, method="RA")
+predictChemPC(xTrain, yTrain, xTest, loghyper, method="NN")
+predictChemPC(xTrain, yTrain, xTest, loghyper, method="GP")
+predictChemPC(xTrain, yTrain, xTest, loghyper, method="EI")
+@
+
+\section{Simulation set-up}
+\paragraph{}In this section we touch the simulation set-up in detail. What happens in the heart of simulation is as follows:
+
+\begin{itemize}
+  \item Data are randomly divided into roughly equal size of train and test data.
+  \item Normalization is applied to train and test data.
+  \item Feature Selection is applied to normalized data to ignore irrelevant and redundant features w.r.t. target values(potency). It's, in turn, born by three steps:
+	\begin{itemize}
+		\item We compute \emph{spearman rank correlation} between each feature i and potency (we name correlation values as p-values afterwards)
+		\item We apply \emph{Bejnamini and Hochberg FDR} procedure over p-values
+		\item Eventually, we select those features for which adjusted p-value <= 0.05 (i.e. their null hypotheses are rejected)
+  	\end{itemize}
+  	
+  \item During a loop, training data are used to fit the Gaussian Process model. Test data are scanned for the compound with maximal expected potency improvement. Subsequently, selected compound is added to training data to further refine the model. The process of adding compounds is continued until all test data are consumed.
+\end{itemize}
+\paragraph{}The last parameter of "SimuChemPC" is meant to repeat these steps. For the purpose of this tutorial, this parameter is set to 5. At the end of the day, the number of simulation steps that is required to find most potent compound in the original test set is considered.
+
+
+<<>>=
+dataX <- datafile[, 1:(col-1)]
+dataY <- as.matrix(as.numeric(array(datafile[, col])))
+
+dim(dataX)
+
+dim(dataY)
+
+rank <- SimuChemPC(dataX, dataY, "RA", 5)
+dim(rank)
+rank[1:5,]
+
+rank <- SimuChemPC(dataX, dataY, "NN", 5)
+dim(rank)
+rank[1:5,]
+
+rank <- SimuChemPC(dataX, dataY, "GP", 5)
+dim(rank)
+rank[1:5,]
+
+rank <- SimuChemPC(dataX, dataY, "EI", 5)
+dim(rank)
+rank[1:5,]
+@
+
+\section{Results}
+\paragraph{} We applied simulation to the whole sample data (consists of 100 molecules) and the result is demonstrated in Figure~\ref{fig1} and Figure~\ref{fig2}. As you can see in figures, \textbf{EI} outperforms other methods as it takes less steps to find most potent compound in the original test set.
+
+\begin{figure}[htp] \centering{
+\includegraphics{Figure1.pdf}}
+\caption{Three most potent compound for each method}
+\label{fig1}
+\end{figure} 
+
+\begin{figure}[htp] \centering{
+\includegraphics[width=5in]{Figure2.pdf}}
+\caption{First, second and third max box plots for each method}
+\label{fig2}
+\end{figure} 
+\clearpage
+\section{R Session Information}
+
+<<echo=FALSE>>=
+options(width=65)
+@
+<<>>=
+sessionInfo()
+@
+\end{document}
